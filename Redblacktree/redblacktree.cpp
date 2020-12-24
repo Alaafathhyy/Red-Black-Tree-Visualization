@@ -308,19 +308,3 @@ node<type> *redblacktree<type>::GetPre(node<type> *NODE) {
         return NODE;
     return GetSuc(NODE->right);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
