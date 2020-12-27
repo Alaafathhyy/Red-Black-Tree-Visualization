@@ -146,12 +146,21 @@ void redblacktree<type>::del(type val) {
         else
             DelNode = (CurNode->right != NULL ? CurNode->right : CurNode->left);
     }
+
     CurNode->value = DelNode->value;
+    if (DelNode->right != NULL || DelNode->left != NULL) {
+        DelNode->value=(DelNode->left==NULL?DelNode->right->value:DelNode->left->value);
+        ReColorBlack((DelNode->left==NULL?DelNode->right:DelNode->left));
+        delete (DelNode->left==NULL?DelNode->right:DelNode->left);
+        DelNode->left=DelNode->right=NULL;
+        return;
+    }
     auto temp = DelNode;
     auto ParTemp = DelNode->parent;
     bool right = 0;
     if (ParTemp->right == temp)
         right = 1;
+
     ReColorBlack(DelNode);
     if (right)
         ParTemp->right = NULL;
@@ -306,5 +315,11 @@ template<class type>
 node<type> *redblacktree<type>::GetPre(node<type> *NODE) {
     if (NODE->right == NULL)
         return NODE;
-    return GetSuc(NODE->right);
+    return GetPre(NODE->right);
+}
+
+template<class type>
+void redblacktree<type>::print() {
+    print(root);
+
 }
