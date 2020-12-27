@@ -1,6 +1,3 @@
-//
-// Created by Hager on 12/21/2020.
-//
 
 #ifndef UNTITLED3_NODE_H
 #define UNTITLED3_NODE_H
