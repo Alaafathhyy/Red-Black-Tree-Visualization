@@ -26,8 +26,7 @@ private :
     void leftRotate(node<type> *NODE);
 
     void rightRotate(node<type> *NODE);
-
-    node<type> *getRoot();
+    void print(node<type> *Node);
 
     void rotate(node<type> *Node, bool direct); // direct is 0 if  rotate left else right
     node<type> *getPar(node<type> *nodee, type val);
@@ -41,14 +40,14 @@ public:
 
     void del(type val);
 
-    void print(node<type> *Node);
 
     void clear();
-
+    void print();
     node<type> *find(node<type> *node, type value);
 
     void clear(node<type> *NODE);
 
+    node<type> *getRoot();
 };
 
 
