@@ -44,7 +44,6 @@ public class RedBlackTree {
         return graph;
     }
 
-    private int sizee = 0;
 
     private void ReColorRed(node Node) {
         if (Node == root) {
@@ -147,6 +146,7 @@ public class RedBlackTree {
         node FarNode;
         boolean FarNodeColor;
         if (slc + src == 2) {
+            assert sl != null;
             if (sl.IsLeft() != NODE.IsLeft()) {
                 FarNode = sl;
             } else {
@@ -158,6 +158,7 @@ public class RedBlackTree {
                 FarNodeColor = sl.IsLeft() != NODE.IsLeft();
                 FarNode = sl;
             } else {
+                assert sr != null;
                 FarNodeColor = sr.IsLeft() != NODE.IsLeft();
                 FarNode = sr;
             }
@@ -195,16 +196,16 @@ public class RedBlackTree {
     }
 
     public void insert(int value) {
-        sizee++;
+
         node Par = new node();
         Par.value = value;
         if (root == null) {
-            root = (node) Par;
+            root = Par;
             root.color = 0;
             return;
 
         }
-        Par = (node) getPar(root, (Integer) value);
+        Par = getPar(root, value);
         //Par become the parent
         node CurNode = new node();
         CurNode.value = value;
@@ -215,15 +216,15 @@ public class RedBlackTree {
             Par.right = CurNode;
         }
 
-        ReColorRed((node) CurNode);
+        ReColorRed(CurNode);
 
     }
 
     public void del(Integer val) {
 
-        node CurNode = (node) find((node) this.getRoot(), val);
+        node CurNode = find(this.getRoot(), val);
         if (CurNode == null) return;
-        sizee--;
+
         node DelNode;
         if (CurNode.right == null && CurNode.left == null) {
             DelNode = CurNode;
@@ -234,10 +235,20 @@ public class RedBlackTree {
                 DelNode = (CurNode.right != null ? CurNode.right : CurNode.left);
         }
         if (DelNode == root) {
-            root=null;
+            root = null;
             return;
         }
         CurNode.value = DelNode.value;
+        if (DelNode.right != null || DelNode.left != null) {
+            DelNode.value = (DelNode.left == null ? DelNode.right.value : DelNode.left.value);
+            ReColorBlack((DelNode.left == null ? DelNode.right : DelNode.left));
+            if (DelNode.left != null)
+                DelNode.left = null;
+            else DelNode.right = null;
+            DelNode.left = DelNode.right = null;
+
+            return;
+        }
         node temp = DelNode;
         node ParTemp = DelNode.parent;
         boolean right = false;
@@ -295,21 +306,7 @@ public class RedBlackTree {
     }
 
     public node getRoot() {
-        return (node) root;
-    }
-
-
-    public void print(node NODE) {
-        if (NODE == null) return;
-        print(NODE.left);
-        System.out.print(NODE.value);
-        System.out.print(" ");
-        print(NODE.right);
-
-    }
-
-    public int size() {
-        return this.sizee;
+        return root;
     }
 
 
@@ -321,24 +318,21 @@ public class RedBlackTree {
         System.gc();
     }
 
-
     public void clear() {
-        this.clear((node) this.root);
+        this.clear(root);
         root = null;
-        sizee = 0;
     }
-
 
     private node GetPre(node NODE) {
         if (NODE.right == null)
             return NODE;
-        return GetSuc(NODE.right);
+        return GetPre(NODE.right);
     }
 
     void leftRotate(node NODE) {
         node ParNode = NODE.right;
         if (NODE == root)
-            root = (node) ParNode;
+            root = ParNode;
         Move(ParNode, NODE);
         NODE.right = ParNode.left;
         // connect new parent's left element with node
@@ -354,7 +348,7 @@ public class RedBlackTree {
         // new parent will be node's left child
         node ParNode = NODE.left;
         if (NODE == root)
-            root = (node) ParNode;
+            root = ParNode;
         Move(ParNode, NODE);
         NODE.left = ParNode.right;
         if (ParNode.right != null)
