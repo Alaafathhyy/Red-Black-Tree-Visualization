@@ -149,10 +149,10 @@ void redblacktree<type>::del(type val) {
 
     CurNode->value = DelNode->value;
     if (DelNode->right != NULL || DelNode->left != NULL) {
-        DelNode->value=(DelNode->left==NULL?DelNode->right->value:DelNode->left->value);
-        ReColorBlack((DelNode->left==NULL?DelNode->right:DelNode->left));
-        delete (DelNode->left==NULL?DelNode->right:DelNode->left);
-        DelNode->left=DelNode->right=NULL;
+        DelNode->value = (DelNode->left == NULL ? DelNode->right->value : DelNode->left->value);
+        ReColorBlack((DelNode->left == NULL ? DelNode->right : DelNode->left));
+        delete (DelNode->left == NULL ? DelNode->right : DelNode->left);
+        DelNode->left = DelNode->right = NULL;
         return;
     }
     auto temp = DelNode;
@@ -191,7 +191,7 @@ void redblacktree<type>::ReColorBlack(node<type> *NODE) {
     }
     if (sc) {
         swap(s->color, p->color);
-        rotate(NODE, !NODE->IsLeft());
+        rotate(p, !NODE->IsLeft());
         ReColorBlack(NODE);
         return;
     }
@@ -203,19 +203,32 @@ void redblacktree<type>::ReColorBlack(node<type> *NODE) {
         else FarNode = sr;
         FarNodeColor = FarNode->color;
     } else {
-        if (sl != NULL) {
-            if (sl->IsLeft() != NODE->IsLeft())
-                FarNodeColor = 1;
-            else FarNodeColor = 0;
-            FarNode = sl;
+        if (sl != NULL && sr != NULL) {
+            if (sl->color) {
+                FarNode = sl;
+                FarNodeColor = (sl->IsLeft() != NODE->IsLeft() ? 1 : 0);
+            } else {
+                FarNode = sr;
+                FarNodeColor = (sr->IsLeft() != NODE->IsLeft() ? 1 : 0);
+            }
+
         } else {
-            if (sr->IsLeft() != NODE->IsLeft())
-                FarNodeColor = 1;
-            else FarNodeColor = 0;
-            FarNode = sr;
+            if (sl != NULL) {
+                if (sl->IsLeft() != NODE->IsLeft())
+                    FarNodeColor = 1;
+                else FarNodeColor = 0;
+                FarNode = sl;
+            } else if (sr != NULL) {
+                if (sr->IsLeft() != NODE->IsLeft())
+                    FarNodeColor = 1;
+                else FarNodeColor = 0;
+                FarNode = sr;
+            }
         }
 
     }
+
+
     if (FarNodeColor) {
         FarNode->color = 0;
         swap(p->color, s->color);
