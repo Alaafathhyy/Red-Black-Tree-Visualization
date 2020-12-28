@@ -143,27 +143,40 @@ public class RedBlackTree {
             ReColorBlack(NODE);
             return;
         }
-        node FarNode;
-        boolean FarNodeColor;
+        node FarNode=null;
+        boolean FarNodeColor = false;
         if (slc + src == 2) {
-            assert sl != null;
-            if (sl.IsLeft() != NODE.IsLeft()) {
+            if (sl.IsLeft() != NODE.IsLeft())
                 FarNode = sl;
-            } else {
-                FarNode = sr;
-            }
-            FarNodeColor = FarNode.color != 0;
+            else FarNode = sr;
+            FarNodeColor = (FarNode.color == 1);
         } else {
-            if (sl != null) {
-                FarNodeColor = sl.IsLeft() != NODE.IsLeft();
-                FarNode = sl;
+            if (sl != null && sr != null) {
+                if (sl.color==1) {
+                    FarNode = sl;
+                    FarNodeColor = (sl.IsLeft() != NODE.IsLeft());
+                } else {
+                    FarNode = sr;
+                    FarNodeColor = (sr.IsLeft() != NODE.IsLeft());
+                }
+
             } else {
-                assert sr != null;
-                FarNodeColor = sr.IsLeft() != NODE.IsLeft();
-                FarNode = sr;
+                if (sl != null) {
+                    if (sl.IsLeft() != NODE.IsLeft())
+                        FarNodeColor = true;
+                    else FarNodeColor = false;
+                    FarNode = sl;
+                } else if (sr != null) {
+                    if (sr.IsLeft() != NODE.IsLeft())
+                        FarNodeColor = true;
+                    else FarNodeColor = false;
+                    FarNode = sr;
+                }
             }
 
         }
+
+
         if (FarNodeColor) {
             FarNode.color = 0;
             int temp = p.color;
