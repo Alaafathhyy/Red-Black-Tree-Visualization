@@ -8,7 +8,7 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
         }
-        Form myForm = new Form();
+        Form myForm = new Form(); //to create a new form
         JFrame jf = new JFrame();
         jf.add(myForm.getMainPanel());
         jf.pack();
